@@ -120,3 +120,8 @@
     flex-direction: column;
   }
 }
+
+/* .waveform-handle-end::before {
+    content: "x";
+    font-weight: 300;
+} */

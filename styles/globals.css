@@ -14,3 +14,50 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.closeButton {
+    top: 3px;
+    right: 3px;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    display: block;
+    position:absolute;
+    font-size: 12px;
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: bold;
+    line-height: 1.1;
+    border-radius: 50%;
+    color: black;
+    background: rgb(255, 215, 0);
+}
+
+.regionLabel {
+    left: 1px;
+    bottom: 0;
+    display: block;
+    padding: 0 3px;
+    z-index: 10;
+    position: absolute;
+    font-size: 0.7em;
+    font-weight: bold;
+    font-family: sans-serif;
+    user-select: none;
+    text-transform: uppercase;
+    color: black;
+    background: rgb(255, 215, 0);
+}
+
+.wavesurfer-handle {
+    width: 1px !important;
+    background-color: rgba(255, 215, 0) !important;
+}
+
+audio {
+    margin-top: 10px;
+}
+
+timeline {
+    margin-bottom: 10px;
+}
