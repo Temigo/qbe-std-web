@@ -1,17 +1,16 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import 'semantic-ui-css/semantic.min.css'
 //import WaveSurfer from "wavesurfer.js"
 import React, { useRef, useEffect } from "react";
 
-//import dynamic from "next/dynamic";
-//const WaveSurfer = dynamic(() => import("wavesurfer.js"), { ssr: false });
-//wavesurfer.js/dist/plugin/wavesurfer.regions.min.js
-//const waveformRef = useRef(null);
+import { Container, Header, Icon } from 'semantic-ui-react'
 
 export default function Home() {
     const waveformRef = useRef();
     const timelineRef = useRef();
     const closeRef = useRef();
+    const sliderRef = useRef();
 
     useEffect(async () => {
       const WaveSurfer = (await import('wavesurfer.js')).default
@@ -20,6 +19,7 @@ export default function Home() {
       //const ElanWaveSegmentPlugin = (await import('wavesurfer.js/dist/plugin/wavesurfer.elan-wave-segment.min.js')).default
       const MarkersPlugin = (await import('wavesurfer.js/dist/plugin/wavesurfer.markers.min.js')).default
       const TimelinePlugin = (await import('wavesurfer.js/dist/plugin/wavesurfer.timeline.min.js')).default
+      const CursorPlugin = (await import('wavesurfer.js/dist/plugin/wavesurfer.cursor.min.js')).default
 
       if(waveformRef.current) {
           console.log(WaveSurfer)
@@ -48,6 +48,10 @@ export default function Home() {
               }),
               TimelinePlugin.create({
                   container: timelineRef.current
+              }),
+              CursorPlugin.create({
+                  showTime: true,
+                  opacity: 1
               })
               //ElanPlugin.create({}),
               //ElanWaveSegmentPlugin.create({})
@@ -94,31 +98,55 @@ export default function Home() {
 
         //waveformRef.current.addEventListener("region-mouseenter", (e) => console.log('hi', e))
         //wavesurfer.on('region-mouseenter', (e) => console.log('hi', e))
+        wavesurfer.on('region-click', (region, event) => {
+            event.stopPropagation();
+            console.log(region, event)
+            //wavesurfer.seekTo(region.start)
+            region.play();
+            //wavesurfer.play(region.start, region.end)
+            console.log('play')
+        });
+
+        sliderRef.current.oninput = function (event) {
+            wavesurfer.zoom(Number(event.target.value));
+            //console.log('zoom', event.target)
+        };
+
         return () => wavesurfer.destroy();
       }
     }, []);
 
   return (
-    <div className={styles.container}>
+    <Container className={styles.container}>
       <Head>
         <title>QBE-STD</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to QBE-STD!
-        </h1>
 
-        <div ref={waveformRef} style={{width: '100%', paddingTop: "1em"}}>
+        <Header as='h1' textAlign='center'>
+          Welcome to QBE-STD!
+        </Header>
+
+        <div style={{width: "80%", margin: "auto"}}>
+            <Icon name="zoom-in" />
+            <input ref={sliderRef} data-action="zoom" type="range" min="20" max="1000" step="100" defaultValue="0" style={{width: "80%", margin: "auto"}}/>
+            <Icon name="zoom-out" />
+        </div>
+
+        <div ref={waveformRef} style={{width: '100%', paddingTop: "1em", position: 'relative'}}>
             <div ref={timelineRef} style={{width: '100%'}}/>
         </div>
+
+
 
       </main>
 
       <footer className={styles.footer}>
         Footer
       </footer>
-    </div>
+
+    </Container>
   )
 }
