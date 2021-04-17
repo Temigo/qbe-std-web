@@ -28,7 +28,7 @@ function Edit(props) {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {files.map((file) => (
+                    {(files !== undefined) && files.map((file) => (
                         <Table.Row key={file.id}>
                             <Table.Cell>{file.id}</Table.Cell>
                             <Table.Cell/>
