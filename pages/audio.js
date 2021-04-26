@@ -174,7 +174,7 @@ function Audio(props) {
       }
   };
   factory();
-}, [props.file.name]);
+}, [props.file === undefined ? props.file : props.file.name]);
 
     useEffect(() => {
         if (waveform.current !== undefined) {

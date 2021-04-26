@@ -13,7 +13,7 @@ function Edit(props) {
     const router = useRouter()
     const [queries, setQueries] = useState([])
     //console.log(files)
-    const [regions, setRegions] = useState(props.files.map((f) => []))
+    const [regions, setRegions] = useState(props.file === undefined ? [] : props.files.map((f) => []))
     console.log('file current', fileIndex, files[fileIndex])
     console.log('region current', regions, regions[fileIndex])
     return (
