@@ -17,7 +17,8 @@ import '@uppy/dashboard/dist/style.css'
 function Upload() {
     const [step, setStep] = useState(1)
     const [collection, setCollection] = useState("")
-    const [files, setFiles] = useState([])
+    const [queryFiles, setQueryFiles] = useState([])
+    const [searchFiles, setSearchFiles] = useState([])
 
     const searchUploader = useUppy(() => {
         return new Uppy({
@@ -42,6 +43,12 @@ function Upload() {
         searchUploader.setFileMetaData(file.id, {
             collection: collection
         })
+    })
+    searchUploader.on('complete', (result) => {
+        console.log(result)
+        if (result.failed.length === 0) {
+            setSearchFiles(result.successful)
+        }
     })
 
     const queryUploader = useUppy(() => {
@@ -71,7 +78,7 @@ function Upload() {
         console.log(result)
         if (result.failed.length === 0) {
             setStep(step + 1)
-            setFiles(result.successful)
+            setQueryFiles(result.successful)
         }
     })
 
@@ -128,13 +135,11 @@ function Upload() {
                     <Dashboard id='step2' uppy={queryUploader} height={200} />
 
                     <Header as='h3'>Option 2: start from scratch with your microphone</Header>
-                    <Link href='/edit'>
-                        <Button primary size='huge'>Start</Button>
-                    </Link>
+
                 </Segment>)}
 
                 {(step === 3) && (<Segment>
-                    <Edit files={files}/>
+                    <Edit files={queryFiles}/>
                 </Segment>)}
 
                 </Container>

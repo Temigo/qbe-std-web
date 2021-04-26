@@ -49,6 +49,14 @@ a {
     background: rgb(255, 215, 0);
 }
 
+.inputLabel {
+    border: none;
+}
+
+.inputLabel:focus {
+    border: none;
+}
+
 .wavesurfer-handle {
     width: 1px !important;
     background-color: rgba(255, 215, 0) !important;

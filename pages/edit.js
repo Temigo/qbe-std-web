@@ -1,23 +1,64 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Container, Header, Icon, Grid, Form, TextArea, List, Segment, Button, Table } from 'semantic-ui-react'
+import { Container, Header, Icon, Grid, Form, TextArea, List, Segment, Button, Table, Select } from 'semantic-ui-react'
 import React, { useRef, useEffect, Component, useState } from "react";
+import Audio from './audio.js'
 
 function Edit(props) {
     console.log('Edit', props)
     const [files, setFiles] = useState(props.files)
-    const router = useRouter()
+    const [fileIndex, setFileIndex] = useState(0)
 
+    const router = useRouter()
+    const [queries, setQueries] = useState([])
+    //console.log(files)
+    const [regions, setRegions] = useState(props.files.map((f) => []))
+    console.log('file current', fileIndex, files[fileIndex])
+    console.log('region current', regions, regions[fileIndex])
     return (
         <div>
-            <Header as='h1'>Edit queries and labels</Header>
+            <Header as='h1'>Edit queries</Header>
+            <p>Click & drag to define new queries. Click on a text label to edit it.</p>
+            <Form>
+                <Form.Field>
+                    <label>Query files</label>
+                    <Select
+                        options={files.map((file) => { return {key: file.id, value: file.id, text: file.name}; } )}
+                        value={ files.length > 0 ? files[fileIndex].id : ''}
+                        onChange={(event, data) => setFileIndex(files.findIndex((f) => f.id == data.value))}
+                    />
+                </Form.Field>
+            </Form>
+
+            {(files !== undefined) && (files.length > 0) && (
+                        <Audio
+                            file={files[fileIndex].data}
+                            annotatedRegions={regions[fileIndex]}
+                            updateAnnotatedRegions={(x) => {
+                                console.log('updateAnnotatedRegions', x)
+                                if (x.attributes.new) {
+                                    console.log('adding')
+                                    setRegions(prevRegions =>[...prevRegions.splice(0, fileIndex), prevRegions[fileIndex].concat([{
+                                        start: x.start,
+                                        end: x.end,
+                                        label: "New query",
+                                        file_id: 'blabla'
+                                    }]), ...prevRegions.splice(fileIndex+1)])
+                                }
+                                else {
+                                    setRegions(prevRegions => [...prevRegions.splice(0, fileIndex), [...prevRegions[fileIndex].slice(0, x.id), { ...prevRegions[fileIndex][x.id], start: x.start, end: x.end }, ...prevRegions[fileIndex].slice(x.id+1)], ...prevRegions.splice(fileIndex+1)]);
+                                }
+                            }}
+                            updateRegionLabel={(id, text) => setRegions(prevRegions => [...prevRegions.slice(0, id), { ...prevRegions[id], label: text }, ...prevRegions.slice(id+1)])}
+                        />
+            )}
 
             <Table celled striped>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>
-                            ID
+                            File ID
                         </Table.HeaderCell>
                         <Table.HeaderCell>
                             Text label
@@ -28,20 +69,17 @@ function Edit(props) {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {(files !== undefined) && files.map((file) => (
-                        <Table.Row key={file.id}>
-                            <Table.Cell>{file.id}</Table.Cell>
-                            <Table.Cell/>
-                            <Table.Cell>{file.name}</Table.Cell>
-                        </Table.Row>
-                    ))}
+                {regions[fileIndex].map((query) => (
+                    <Table.Row>
+                        <Table.Cell>{query.file_id}</Table.Cell>
+                        <Table.Cell>{query.label}</Table.Cell>
+                        <Table.Cell>{query.start}-{query.end}</Table.Cell>
+                    </Table.Row>
+                ))}
                 </Table.Body>
 
             </Table>
-            <Button circular color='green' floated='right' onClick={() => { setFiles([...files, {id: Date.now(), name: ''} ]); } }>
-                <Icon name='add' />
-                Add row
-            </Button>
+
             <div style={{clear: 'both'}}/>
             <p>Once you have checked the query labels and associations, you can submit your search job.</p>
 
