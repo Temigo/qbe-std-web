@@ -7,15 +7,15 @@ import Audio from './audio.js'
 
 function Edit(props) {
     console.log('Edit', props)
-    const [files, setFiles] = useState(props.files)
+    const [files, setFiles] = useState(props.files === undefined ? [] : props.files)
     const [fileIndex, setFileIndex] = useState(0)
 
     const router = useRouter()
     const [queries, setQueries] = useState([])
     //console.log(files)
     const [regions, setRegions] = useState(props.file === undefined ? [] : props.files.map((f) => []))
-    console.log('file current', fileIndex, files[fileIndex])
-    console.log('region current', regions, regions[fileIndex])
+    //console.log('file current', fileIndex, files[fileIndex])
+    //console.log('region current', regions, regions[fileIndex])
     return (
         <div>
             <Header as='h1'>Edit queries</Header>
@@ -69,7 +69,7 @@ function Edit(props) {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                {regions[fileIndex].map((query) => (
+                {regions[fileIndex] !== undefined && regions[fileIndex].map((query) => (
                     <Table.Row>
                         <Table.Cell>{query.file_id}</Table.Cell>
                         <Table.Cell>{query.label}</Table.Cell>
