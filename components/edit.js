@@ -6,16 +6,16 @@ import React, { useRef, useEffect, Component, useState } from "react";
 import Audio from './audio.js'
 
 function Edit(props) {
-    console.log('Edit', props)
-    const [files, setFiles] = useState(props.files === undefined ? [] : props.files)
+    console.log('Edit', props.files)
+    const [files, setFiles] = useState(props.files)
     const [fileIndex, setFileIndex] = useState(0)
 
     const router = useRouter()
     const [queries, setQueries] = useState([])
     //console.log(files)
-    const [regions, setRegions] = useState(props.file === undefined ? [] : props.files.map((f) => []))
+    const [regions, setRegions] = useState(props.files.map((f) => []))
     //console.log('file current', fileIndex, files[fileIndex])
-    //console.log('region current', regions, regions[fileIndex])
+    console.log('region current', regions, fileIndex)
     return (
         <div>
             <Header as='h1'>Edit queries</Header>

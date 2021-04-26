@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { Container, Header, Icon, Grid, Form, TextArea, List, Segment, Button, Transition, Step } from 'semantic-ui-react'
 import React, { useRef, useEffect, Component, useState } from "react";
-import Edit from './edit.js'
+import Edit from '../components/edit.js'
 
 import Uppy from '@uppy/core'
 import GoogleDrive from '@uppy/google-drive'

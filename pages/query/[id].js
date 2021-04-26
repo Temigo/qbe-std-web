@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Container, Header, Icon, Grid, Form, TextArea, List, Segment, Button, Transition, Step, Table, Card, Input } from 'semantic-ui-react'
 import useSWR from 'swr'
 import React, { useRef, useEffect, Component, useState } from "react";
-import Audio from '../audio.js'
+import Audio from '../../components/audio.js'
 
 //const fetcher = (...args) => fetch(...args).then(res => res.json())
 const fetcher = url => fetch(url).then(r => r.json())
